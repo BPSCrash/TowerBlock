@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    [SerializeField] float _cameraMovementAmount = 2.5f;
     private Vector3 _cameraPosition;
     void Start()
     {
         _cameraPosition = this.transform.position;
     }
 
-    public void MoveCamera()
+    public IEnumerator MoveCamera()
     {
-        _cameraPosition.y += 2f * Time.deltaTime;
+        _cameraPosition.y += _cameraMovementAmount * Time.deltaTime;
         this.transform.position = _cameraPosition;
+        yield return new WaitForSeconds(.1f);
     }
+    
 }

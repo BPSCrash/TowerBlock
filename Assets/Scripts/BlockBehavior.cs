@@ -6,16 +6,15 @@ public class BlockBehavior : MonoBehaviour
 {
     [SerializeField] float _rotationRadius = 2f, _angularSpeed = 2f;
     float _angle = 0f;
+    BlockSpawn _blockSpawnScript;
     Rigidbody2D _rigidBody;
+    bool _isGameFailable = false;
+
 
     private void Start()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
-    }
-
-    void Update()
-    {
-
+        _blockSpawnScript = FindObjectOfType<BlockSpawn>();
     }
 
     private void FixedUpdate()
@@ -32,4 +31,23 @@ public class BlockBehavior : MonoBehaviour
         _angle = _angle + Time.deltaTime * _angularSpeed;
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            if (!_isGameFailable)
+            {
+            _isGameFailable = true;
+            _blockSpawnScript.SpawnBlock();
+            } else
+            {
+                Debug.Log("YOU FAILED : " + _isGameFailable);
+            }
+        }
+
+        if (collision.gameObject.CompareTag("Block"))
+        {
+            _blockSpawnScript.SpawnBlock();
+        }
+    }
 }

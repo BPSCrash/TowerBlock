@@ -5,30 +5,33 @@ using UnityEngine;
 public class BlockSpawn : MonoBehaviour
 {
     [SerializeField] GameObject BlockPrefab;
-    GameObject currentBlock;
-   
+    GameObject _currentBlock;
+    bool _hangingBlockExists = false;
+
+    private void Start()
+    {
+        SpawnBlock();
+    }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            SpawnBlock();
-        }
-
-        if (Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             DropBlock();
         }
     }
 
-    void SpawnBlock()
+    public void SpawnBlock()
     {
-       currentBlock = Instantiate(BlockPrefab, new Vector3(transform.position.x , transform.position.y, 0f), transform.rotation);
+        if (!_hangingBlockExists)
+        {
+       _hangingBlockExists = true;
+       _currentBlock = Instantiate(BlockPrefab, new Vector3(transform.position.x , transform.position.y, 0f), transform.rotation);
+        }
     }
 
     void DropBlock()
     {
-        currentBlock.GetComponent<Rigidbody2D>().gravityScale += 1f;
+        _hangingBlockExists = false;
+        _currentBlock.GetComponent<Rigidbody2D>().gravityScale += 1f;
     }
-
-
 }

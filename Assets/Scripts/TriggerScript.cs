@@ -5,20 +5,38 @@ using UnityEngine;
 public class TriggerScript : MonoBehaviour
 {
     private bool _isBlockInTrigger = false;
+    CameraController _cameraControllerScript;
+    Coroutine _lastCoroutine = null;
 
+    private void Start()
+    {
+        _cameraControllerScript = transform.parent.GetComponent<CameraController>();
+    }
+
+    // Logic for camera Movement
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Block")
+        if (collision.gameObject.CompareTag("Block"))
         {
-            _isBlockInTrigger = true;
+            _lastCoroutine = StartCoroutine(CheckIfBlockInTrigger(collision));
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == "Block")
+        if(collision.gameObject.CompareTag("Block"))
         {
+            StopCoroutine(_lastCoroutine);
             _isBlockInTrigger = false;
+        }
+    }
+
+    IEnumerator CheckIfBlockInTrigger(Collider2D collision)
+    {
+        yield return new WaitForSecondsRealtime(0.5f);
+        if(collision.gameObject.CompareTag("Block"))
+        {
+            _isBlockInTrigger = true;
         }
     }
 
@@ -26,7 +44,7 @@ public class TriggerScript : MonoBehaviour
     {
         if (_isBlockInTrigger)
         {
-        transform.parent.GetComponent<CameraController>().MoveCamera();
+            StartCoroutine(_cameraControllerScript.MoveCamera());
         }
     }
 }
