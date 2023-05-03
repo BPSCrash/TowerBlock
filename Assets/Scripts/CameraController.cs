@@ -15,7 +15,7 @@ public class CameraController : MonoBehaviour
     {
         _cameraPosition.y += _cameraMovementAmount * Time.deltaTime;
         this.transform.position = _cameraPosition;
-        yield return new WaitForSeconds(.1f);
+        yield return null;
     }
     
 }

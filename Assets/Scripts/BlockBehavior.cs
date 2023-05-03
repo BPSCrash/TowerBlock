@@ -27,7 +27,7 @@ public class BlockBehavior : MonoBehaviour
 
     void BlockIdleMovement()
     {
-        _rigidBody.velocity = new Vector2(Mathf.Cos(_angle), Mathf.Sin(_angle) * _rotationRadius / 3 * _angularSpeed);
+        _rigidBody.velocity = new Vector2(Mathf.Cos(_angle), Mathf.Sin(_angle) * _rotationRadius / 2 * _angularSpeed);
         _angle = _angle + Time.deltaTime * _angularSpeed;
     }
 
@@ -37,9 +37,10 @@ public class BlockBehavior : MonoBehaviour
         {
             if (!_isGameFailable)
             {
-            _isGameFailable = true;
-            _blockSpawnScript.SpawnBlock();
-            } else
+                _isGameFailable = true;
+                _blockSpawnScript.SpawnBlock();
+            }
+            else
             {
                 Debug.Log("YOU FAILED : " + _isGameFailable);
             }
