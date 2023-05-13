@@ -222,8 +222,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9827d78a823b56243952fa00f4e1bed4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cameraMovementAmount: 3.5
-  IsCameraMoving: 0
+  _cameraMovementAmount: 5
 --- !u!1 &730650788
 GameObject:
   m_ObjectHideFlags: 0
@@ -273,7 +272,6 @@ MonoBehaviour:
   _leftLine: {fileID: 971821394}
   _rightLine: {fileID: 870884902}
   _ropeLenght: 4
-  cameraController: {fileID: 519420033}
 --- !u!1 &763269870
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,7 +10,6 @@ public class BlockBehavior : MonoBehaviour
     Rigidbody2D _rigidBody;
     bool _isGameFailable = false;
 
-
     private void Start()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
@@ -38,7 +37,7 @@ public class BlockBehavior : MonoBehaviour
             if (!_isGameFailable)
             {
                 _isGameFailable = true;
-                _blockSpawnScript.SpawnBlock();
+                StartCoroutine(_blockSpawnScript.SpawnBlockWithDelay(0));
             }
             else
             {
@@ -48,7 +47,7 @@ public class BlockBehavior : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Block"))
         {
-            _blockSpawnScript.SpawnBlock();
+            StartCoroutine(_blockSpawnScript.SpawnBlockWithDelay(0.5f));
         }
     }
 }
