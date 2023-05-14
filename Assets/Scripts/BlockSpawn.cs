@@ -39,7 +39,7 @@ public class BlockSpawn : MonoBehaviour
         {
             _hangingBlockExists = true;
             _linesVisible = true;
-            _currentBlock = Instantiate(BlockPrefab, new Vector3(transform.position.x, transform.position.y, 0f), transform.rotation);
+            _currentBlock = Instantiate(BlockPrefab, new Vector3(this.transform.position.x, this.transform.position.y, 0f), transform.rotation);
         }
         else if (_isCameraMoving)
         {

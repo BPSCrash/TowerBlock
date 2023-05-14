@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine;
 public class BlockBehavior : MonoBehaviour
 {
     [SerializeField] float _rotationRadius = 2f, _angularSpeed = 2f;
+    [SerializeField] float _duration = 1f;
     float _angle = 0f;
     BlockSpawn _blockSpawnScript;
     Rigidbody2D _rigidBody;
@@ -14,6 +16,7 @@ public class BlockBehavior : MonoBehaviour
     {
         _rigidBody = GetComponent<Rigidbody2D>();
         _blockSpawnScript = FindObjectOfType<BlockSpawn>();
+        SpawnAnimation();
     }
 
     private void FixedUpdate()
@@ -22,6 +25,15 @@ public class BlockBehavior : MonoBehaviour
         {
             BlockIdleMovement();
         }
+    }
+
+    void SpawnAnimation()
+    {
+        var sequence = DOTween.Sequence();
+
+        sequence.Append(transform.DOLocalMove(new Vector3(this.transform.position.x + 2.8f, this.transform.position.y + - 2.6f, 0), _duration).SetEase(Ease.InOutSine));
+        sequence.Append(transform.DOLocalMove(new Vector3(this.transform.position.x, this.transform.position.y + -3.6f, 0), _duration * 0.5f).SetEase(Ease.InSine));
+        
     }
 
     void BlockIdleMovement()
