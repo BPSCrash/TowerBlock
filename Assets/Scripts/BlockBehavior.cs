@@ -7,15 +7,19 @@ public class BlockBehavior : MonoBehaviour
 {
     [SerializeField] float _rotationRadius = 2f, _angularSpeed = 2f;
     [SerializeField] float _duration = 1f;
+    private LogicScript _logic;
     float _angle = 0f;
     BlockSpawn _blockSpawnScript;
     Rigidbody2D _rigidBody;
-    bool _isGameFailable = false;
+    bool _shouldKeepScore = true;
+    bool _isGameFailable;
 
     private void Start()
     {
+        _logic = FindAnyObjectByType<LogicScript>();
         _rigidBody = GetComponent<Rigidbody2D>();
         _blockSpawnScript = FindObjectOfType<BlockSpawn>();
+        _isGameFailable = _logic.GetGameFailable();
         SpawnAnimation();
     }
 
@@ -31,9 +35,9 @@ public class BlockBehavior : MonoBehaviour
     {
         var sequence = DOTween.Sequence();
 
-        sequence.Append(transform.DOLocalMove(new Vector3(this.transform.position.x + 2.8f, this.transform.position.y + - 2.6f, 0), _duration).SetEase(Ease.InOutSine));
+        sequence.Append(transform.DOLocalMove(new Vector3(this.transform.position.x + 2.8f, this.transform.position.y + -2.6f, 0), _duration * 0.5f).SetEase(Ease.InOutSine));
         sequence.Append(transform.DOLocalMove(new Vector3(this.transform.position.x, this.transform.position.y + -3.6f, 0), _duration * 0.5f).SetEase(Ease.InSine));
-        
+
     }
 
     void BlockIdleMovement()
@@ -48,17 +52,29 @@ public class BlockBehavior : MonoBehaviour
         {
             if (!_isGameFailable)
             {
-                _isGameFailable = true;
+
+                if (_shouldKeepScore)
+                {
+                    _logic.AddScore(false);
+                    _shouldKeepScore = false;
+                }
+                _logic.SetGameFailable();
                 StartCoroutine(_blockSpawnScript.SpawnBlockWithDelay(0));
             }
             else
             {
-                Debug.Log("YOU FAILED : " + _isGameFailable);
+                _shouldKeepScore = false;
+                _logic.GameOver();
             }
         }
 
         if (collision.gameObject.CompareTag("Block"))
         {
+            if (_shouldKeepScore)
+            {
+                _logic.AddScore(false);
+                _shouldKeepScore = false;
+            }
             StartCoroutine(_blockSpawnScript.SpawnBlockWithDelay(0.5f));
         }
     }
