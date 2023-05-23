@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Block
   - Ground
+  - ParticleTrigger
+  - Logic
+  - BlockCheckTrigger
   layers:
   - Default
   - TransparentFX
@@ -48,4 +51,7 @@ TagManager:
     locked: 0
   - name: Block
     uniqueID: 27865087
+    locked: 0
+  - name: Particles
+    uniqueID: 3636387473
     locked: 0
