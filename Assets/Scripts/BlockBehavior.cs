@@ -8,17 +8,21 @@ public class BlockBehavior : MonoBehaviour
     [SerializeField] float _rotationRadius = 2f, _angularSpeed = 2f;
     [SerializeField] float _duration = 1f;
     private LogicScript _logic;
-    float _angle = 0f;
+    Camera _camera;
     BlockSpawn _blockSpawnScript;
     Rigidbody2D _rigidBody;
+    SpriteRenderer _spriteRenderer;
+    float _angle = 0f;
     bool _shouldKeepScore = true;
     bool _isGameFailable;
 
     private void Start()
     {
+        _camera = Camera.main;
         _logic = FindAnyObjectByType<LogicScript>();
         _rigidBody = GetComponent<Rigidbody2D>();
         _blockSpawnScript = FindObjectOfType<BlockSpawn>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
         _isGameFailable = _logic.GetGameFailable();
         SpawnAnimation();
     }
@@ -29,6 +33,29 @@ public class BlockBehavior : MonoBehaviour
         {
             BlockIdleMovement();
         }
+    }
+
+    private void Update()
+    {
+        checkIfBlockIsVisible();
+    }
+
+    void checkIfBlockIsVisible()
+    {
+        Vector3 blockPositionInView = _camera.WorldToScreenPoint(transform.position);
+        if (blockPositionInView.y < -700)
+        {
+            GameObject.Destroy(gameObject);
+        }
+        else if (blockPositionInView.y < -500)
+        {
+            _rigidBody.constraints = RigidbodyConstraints2D.FreezePosition;
+        }
+        else if (blockPositionInView.y < -100)
+        {
+            _spriteRenderer.enabled = false;
+        }
+
     }
 
     void SpawnAnimation()
@@ -59,6 +86,7 @@ public class BlockBehavior : MonoBehaviour
                     _shouldKeepScore = false;
                 }
                 _logic.SetGameFailable();
+                _rigidBody.collisionDetectionMode = CollisionDetectionMode2D.Discrete;
                 StartCoroutine(_blockSpawnScript.SpawnBlockWithDelay(0));
             }
             else
@@ -75,6 +103,7 @@ public class BlockBehavior : MonoBehaviour
                 _logic.AddScore(false);
                 _shouldKeepScore = false;
             }
+            _rigidBody.collisionDetectionMode = CollisionDetectionMode2D.Discrete;
             StartCoroutine(_blockSpawnScript.SpawnBlockWithDelay(0.5f));
         }
     }

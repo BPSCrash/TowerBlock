@@ -8,6 +8,7 @@ TagManager:
   - Ground
   - ParticleTrigger
   - Logic
+  - BlockCheckTrigger
   layers:
   - Default
   - TransparentFX
